@@ -10,6 +10,8 @@ public class Funciones {
     static Scanner sc = new Scanner(System.in);
 
     public static void menu() throws SQLException {
+        System.out.println("Presione enter para continuar");
+        sc.nextLine();
 
         System.out.println("""
                 =====================================
@@ -23,28 +25,11 @@ public class Funciones {
                 """);
         String seleccion = sc.nextLine();
         opciones(seleccion);
-
     }
     public static void opciones(String seleccion) throws SQLException {
         switch (seleccion){
             case "1" ->{
-                System.out.println("Escribe la id del ninja que deseas ver: ");
-                int idNinja = sc.nextInt();
-                OrderNinja(idNinja);
-                sc.nextLine();
-                System.out.println("¿Deseas ver las habilidades?------(Si/No)");
-                String selector = sc.nextLine();
-                if (selector.equalsIgnoreCase("si")){
-                    orderHabilidades(idNinja);
-                    menu();
-                }
-                else if(selector.equalsIgnoreCase("no")){
-                    menu();
-                }
-                else {
-                    System.out.println("Dato no valido");
-                    menu();
-                }
+                verNinjaHabilidad();
             }
             case "2" ->{
                 orderMision();
@@ -61,12 +46,16 @@ public class Funciones {
             case "6" ->{
                 orderMisionesCompletas();
             }
+            default -> {
+                System.out.println("Selector no definido");
+                menu();
+            }
         }
     }
 
     //vista misiones
     public static void orderMision() throws SQLException{
-        if (viewMisiones().size() == 0){
+        if (viewMisiones().isEmpty()){
             System.out.println("No hay misiones en este momento");
         }else {
             for (int i = 0; i< viewMisiones().size();i++){
@@ -84,21 +73,25 @@ public class Funciones {
         menu();
     }
     public static void misionesCompletasNinja() throws SQLException{
-        System.out.println("Ingrese la id del ninja que desea verle las misiones completadas: ");
-        int idNinja = sc.nextInt();
-        sc.nextLine();
-        if (viewCompletesNinjasMisiones(idNinja).size() == 0){
-            System.out.println("Este ninja no ah hecho ninguna mision");
-        }else{
-            for(int i = 0; i< viewCompletesNinjasMisiones(idNinja).size();i++){
-                System.out.println("=====================");
-                System.out.println("id Mision: "+ viewCompletesMisiones().get(i).getId() + "\nid Ninja: "+viewCompletesMisiones().get(i).getId_ninja()+"\nDescripcion: "+viewCompletesMisiones().get(i).getDescripcion()+ "\nFecha de inicio: "+ viewCompletesMisiones().get(i).getFecha_inicio()+"\nFecha de finalizacion: "+viewCompletesMisiones().get(i).getFecha_final());
+        try{
+            System.out.println("Ingrese la id del ninja que desea verle las misiones completadas: ");
+            int idNinja = sc.nextInt();
+            if (viewCompletesNinjasMisiones(idNinja).isEmpty()){
+                System.out.println("Este ninja no ah hecho ninguna mision");
+            }else{
+                for(int i = 0; i< viewCompletesNinjasMisiones(idNinja).size();i++){
+                    System.out.println("=====================");
+                    System.out.println("id Mision: "+ viewCompletesNinjasMisiones(idNinja).get(i).getId() + "\nid Ninja: "+viewCompletesNinjasMisiones(idNinja).get(i).getId_ninja()+"\nDescripcion: "+viewCompletesNinjasMisiones(idNinja).get(i).getDescripcion()+ "\nFecha de inicio: "+ viewCompletesNinjasMisiones(idNinja).get(i).getFecha_inicio()+"\nFecha de finalizacion: "+viewCompletesNinjasMisiones(idNinja).get(i).getFecha_final());
+                }
             }
+            menu();
+        }catch (Exception e){
+            System.out.println("Dato no valido");
+            menu();
         }
-        menu();
     }
     public static void orderM() throws SQLException{
-        if (viewMisiones().size() == 0){
+        if (viewMisiones().isEmpty()){
             System.out.println("No hay misiones para completar");
         }else{
             for (int i = 0; i< viewMisiones().size();i++){
@@ -108,42 +101,83 @@ public class Funciones {
         }
     }
     public static void verEnCurso() throws SQLException{
-        for (int i = 0; i< verMisionesCurso().size(); i++){
-            System.out.println("=====================================");
-            System.out.println("id Mision: "+ verMisionesCurso().get(i).getId() + "\nid Ninja: "+verMisionesCurso().get(i).getId_ninja()+"\nDescripcion: "+verMisionesCurso().get(i).getDescripcion()+ "\nFecha de inicio: "+ verMisionesCurso().get(i).getFecha_inicio()+"\nFecha de finalizacion: "+verMisionesCurso().get(i).getFecha_final());
-        }
-        System.out.println("Cual de las siguientes misiones quieres asignar como completada: ");
-        int idMision = sc.nextInt();
-        sc.nextLine();
-        System.out.println("Escriba la fecha de hoy para completar el sistema terminar mision: ");
-        String fechaFinal = sc.nextLine();
+        try {
+            if (verMisionesCurso().isEmpty()){
+                System.out.println("No hay misiones en curso");
+                menu();
+            }else{
+                for (int i = 0; i< verMisionesCurso().size(); i++){
+                    System.out.println("=====================================");
+                    System.out.println("id Mision: "+ verMisionesCurso().get(i).getId() + "\nid Ninja: "+verMisionesCurso().get(i).getId_ninja()+"\nDescripcion: "+verMisionesCurso().get(i).getDescripcion()+ "\nFecha de inicio: "+ verMisionesCurso().get(i).getFecha_inicio()+"\nFecha de finalizacion: "+verMisionesCurso().get(i).getFecha_final());
+                }
+                System.out.println("Cual de las siguientes misiones quieres asignar como completada: ");
+                int idMision = sc.nextInt();
+                sc.nextLine();
+                System.out.println("Escriba la fecha de hoy para completar el sistema terminar mision: ");
+                String fechaFinal = sc.nextLine();
 
-        misionCompletada(idMision,fechaFinal);
-        menu();
+                misionCompletada(idMision,fechaFinal);
+                menu();
+            }
+
+        }catch (Exception e){
+            System.out.println("Dato no valido");
+            menu();
+        }
 
     }
     public static void asignacionMision() throws SQLException{
         orderM();
-        System.out.println("Elija la id de la mision que desea establecerle a un ninja: ");
-        int idMision = sc.nextInt();
-        sc.nextLine();
+        try {
+            System.out.println("Elija la id de la mision que desea establecerle a un ninja: ");
+            int idMision = sc.nextInt();
+            sc.nextLine();
 
-        verTodosNinjas();
-        System.out.println("Elija la id del ninja que desea establecerle la mision: ");
-        int idNinja = sc.nextInt();
-        sc.nextLine();
+            verTodosNinjas();
+            System.out.println("Elija la id del ninja que desea establecerle la mision: ");
+            int idNinja = sc.nextInt();
+            sc.nextLine();
 
-        System.out.println("Establezca la fecha de inicion para la mision: ");
-        String FechaInicio = sc.nextLine();
+            System.out.println("Establezca la fecha de inicion para la mision(AAAA-MM-DD): ");
+            String FechaInicio = sc.nextLine();
 
-        asignarMision(idMision,idNinja,FechaInicio);
-        menu();
+            asignarMision(idMision,idNinja,FechaInicio);
+            menu();
+        }catch (Exception e){
+            System.out.println("Dato no valido");
+            menu();
+        }
     }
 
     //Vista ninja
     public static void verTodosNinjas() throws SQLException{
         for (int i = 0; i < viewAllNinja().size(); i++ ){
             System.out.println("ID: "+viewAllNinja().get(i).getId()+"\nNombre: "+ viewAllNinja().get(i).getNombre() +"\nRango: "+viewAllNinja().get(i).getRango()+"\nAldea: "+viewAllNinja().get(i).getAldea());
+        }
+    }
+    public static void verNinjaHabilidad() throws SQLException{
+        System.out.println("Escribe la id del ninja que deseas ver: ");
+        try {
+            int idNinja = sc.nextInt();
+            OrderNinja(idNinja);
+            sc.nextLine();
+            System.out.println("¿Deseas ver las habilidades?------(Si/No)");
+            String selector = sc.nextLine();
+            if (selector.equalsIgnoreCase("si")){
+                orderHabilidades(idNinja);
+                menu();
+            }
+            else if(selector.equalsIgnoreCase("no")){
+                menu();
+            }
+            else {
+                System.out.println("Dato no valido");
+                menu();
+            }
+        }
+        catch (Exception e){
+            System.out.println("Dato no valido");
+            menu();
         }
     }
 

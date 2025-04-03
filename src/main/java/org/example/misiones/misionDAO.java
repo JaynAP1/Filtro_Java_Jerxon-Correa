@@ -33,7 +33,7 @@ public class misionDAO {
     }
 
     public static ArrayList<misiones> viewCompletesNinjasMisiones(int id) throws SQLException {
-        String sql = "select * from misionNinja inner join mision on misionNinja.id_mision = mision.id where id_ninja = ? and mision.completada = 1";
+        String sql = "select * from misionNinja inner join mision on misionNinja.id_mision = mision.id where id_ninja = ? and fecha_fin != '0'";
         ArrayList<misiones> misionCompleta = new ArrayList<>();
 
         try(PreparedStatement query = conexion.prepareStatement(sql)){
@@ -94,7 +94,7 @@ public class misionDAO {
         }
     }
     public static ArrayList<misiones> verMisionesCurso() throws SQLException{
-        String sql = "select * from misionNinja inner join mision on misionNinja.id_mision = mision.id where id_ninja = 1 and fecha_fin = 0;";
+        String sql = "select * from misionNinja inner join mision on misionNinja.id_mision = mision.id where fecha_fin = 0;";
 
         ArrayList<misiones> mision = new ArrayList<>();
 
@@ -124,5 +124,6 @@ public class misionDAO {
             query.executeUpdate();
         }
     }
+
 
 }
