@@ -1,6 +1,18 @@
 ## Aldeas
 
 Proyecto filtro de java en el que establecemos un sistema crud para las misiones de una aldea de ninjas.
+
+ ## Diagramas UML
+ ### Ninjas
+ ![alt text](image.png)
+
+### Misiones
+![alt text](image-1.png)
+
+### Diagrama de base de datos
+![alt text](image-2.png)
+
+## SQL inserciones y creacion de tablas
 ```sql
  create database `brwhnvouktlyex7hdtjy`;
 use `brwhnvouktlyex7hdtjy`;
